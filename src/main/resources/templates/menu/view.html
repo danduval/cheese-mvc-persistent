@@ -8,6 +8,8 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
+<h1 th:text="${menu.getName()}"></h1>
+
 <ul>
     <li th:each="cheese : ${menu.cheeses}" th:text="${cheese.name}"></li>
 </ul>

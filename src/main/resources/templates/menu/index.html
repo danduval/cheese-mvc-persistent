@@ -10,8 +10,12 @@
 
 
 <ul>
-    <a th:each="menu : ${menus}" th:href="@{menu/view/${menu.getId}}"><li th:text="${menu.getName()}"></li></a>
+    <!-- Why don't these links work?  the "menu.getId" part isn't being evaluated for some reason. -->
+    <li th:each="menu : ${menus}" >
+        <a th:href="@{/menu/view/{id}(id=${menu.id})}" th:text="${menu.getName()}" ></a>
+    </li>
 </ul>
+
 <a href="menu/add">Add Menu</a>
 
 </body>

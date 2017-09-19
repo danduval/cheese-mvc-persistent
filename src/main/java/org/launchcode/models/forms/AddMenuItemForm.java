@@ -4,6 +4,7 @@ import org.launchcode.models.Cheese;
 import org.launchcode.models.Menu;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public class AddMenuItemForm {
 
@@ -17,10 +18,11 @@ public class AddMenuItemForm {
     @NotNull
     private int cheeseId;
 
-    public void AddMenuItemForm() {
+    public AddMenuItemForm() {
     }
 
-    public void AddMenuItemForm(Menu menu, Iterable<Cheese> cheeses) {
+    public AddMenuItemForm(Menu menu, Iterable<Cheese> cheeses) {
+
         this.menu = menu;
         this.cheeses = cheeses;
     }

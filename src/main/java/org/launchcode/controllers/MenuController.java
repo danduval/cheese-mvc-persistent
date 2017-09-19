@@ -1,9 +1,11 @@
 package org.launchcode.controllers;
 
 
+import org.launchcode.models.Cheese;
 import org.launchcode.models.Menu;
 import org.launchcode.models.data.CheeseDao;
 import org.launchcode.models.data.MenuDao;
+import org.launchcode.models.forms.AddMenuItemForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "menu")
@@ -71,10 +75,30 @@ public class MenuController {
     public String addItem(@PathVariable("menuId") int menuId, Model model) {
 
         Menu menu = menuDao.findOne(menuId);
+        Iterable<Cheese> cheeses = cheeseDao.findAll();
+        AddMenuItemForm form = new AddMenuItemForm(menu, cheeses);
 
+        model.addAttribute("form", form);
+        // will the following line work?  How about that syntax in the value field?
+        model.addAttribute("title", "Add Item to Menu: " + menu.getName());
 
+        return "menu/add-item";
+    }
 
-        return "";
+    @RequestMapping(value = "add-item", method = RequestMethod.POST)
+    public String addItem(@ModelAttribute @Valid AddMenuItemForm form, Errors errors, Model model) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "'Add Item to Menu: ' + form.menu.getName()");
+            return "menu/add-item";
+        }
+
+        Cheese cheese = cheeseDao.findOne(form.getCheeseId());
+        Menu menu = menuDao.findOne(form.getMenuId());
+        menu.addItem(cheese);
+        menuDao.save(menu);
+
+        return "redirect:view/" + menu.getId();
     }
 
 }
